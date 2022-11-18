@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    username: watchlist-service
+    password: watchlist-service
+    url: jdbc:postgresql://localhost:5432/watchlist
+
+notification:
+  url: http://localhost:8081

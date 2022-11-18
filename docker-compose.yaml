@@ -8,10 +8,10 @@ services:
       POSTGRES_USER: watchlist-service
       POSTGRES_PASSWORD: watchlist-service
       POSTGRES_DB: watchlist
-#  rabbitmq:
-#    image: rabbitmq:3-management
-#    container_name: rabbitmq
-#    restart: always
-#    ports:
-#      - "15672:15672"
-#      - "5672:5672"
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "15672:15672"
+      - "5672:5672"

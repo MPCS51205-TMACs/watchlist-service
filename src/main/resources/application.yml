@@ -7,5 +7,9 @@ spring:
     password: watchlist-service
     url: jdbc:postgresql://localhost:5432/watchlist
 
+jwt:
+  secret: G+KbPeShVmYq3t6w9z$C&F)J@McQfTjW
+
+
 notification:
   url: http://localhost:8081

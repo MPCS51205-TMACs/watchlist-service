@@ -19,4 +19,6 @@ interface WatchlistRepo: JpaRepository<Watchlist, UUID> {
     @Query("select DISTINCT wb.watchlist.userId from WatchlistBuyNow wb where wb.value = ?1")
     fun getWatchlistsByByNowValue(buyNow: Boolean) : Collection<UUID>
 
+    @Query
+    fun getWatchlistsByUserId(userId:UUID) : Collection<Watchlist>
 }

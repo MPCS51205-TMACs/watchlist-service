@@ -19,7 +19,7 @@ class WatchlistService(val watchlistRepo: WatchlistRepo) {
         return save(watchlist)
     }
 
-    fun getWatchlistById(watchlistId: UUID) = getReferenceById(watchlistId)
+    fun getMyWatchlists(userId: UUID) : Collection<Watchlist> = watchlistRepo.getWatchlistsByUserId(userId)
 
 
     fun getUsersWatchingForItem(item: Item): Collection<UUID> {

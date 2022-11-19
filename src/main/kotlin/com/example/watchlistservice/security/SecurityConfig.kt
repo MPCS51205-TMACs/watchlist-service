@@ -6,7 +6,6 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -69,8 +68,6 @@ class SecurityConfig {
         }
 
         private fun getAuthorities(jwt: Jwt): Collection<GrantedAuthority> {
-            val authorities = jwt.claims["authorities"]
-            println(authorities)
             return jwt.claims.get("authorities").let { it as List<*> }
                 .map { auth -> SimpleGrantedAuthority(auth.toString()) }
         }

@@ -18,4 +18,7 @@ class WatchlistController(val watchlistService: WatchlistService) {
         watchlist.userId = UUID.fromString(authentication.name)
         return watchlistService.createWatchlist(watchlist)
     }
+
+    @GetMapping
+    fun getMyWatchlists(authentication: Authentication) : Collection<Watchlist> = watchlistService.getMyWatchlists(UUID.fromString(authentication.name))
 }

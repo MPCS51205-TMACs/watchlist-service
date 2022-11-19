@@ -8,7 +8,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table
+@Table(indexes = [Index(columnList = "userId")])
 class Watchlist {
     @Id
     @GenericGenerator(name = "uuid2", strategy = "uuid2")

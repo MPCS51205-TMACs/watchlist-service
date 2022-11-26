@@ -24,6 +24,7 @@ class WatchlistService(val watchlistRepo: WatchlistRepo) {
 
     fun getUsersWatchingForItem(item: Item): Collection<UUID> {
         //TODO: startingPrice or BuyNow price
+        //TODO: no categories
         return watchlistRepo.getWatchlistsByPrice(item.startingPrice)
             .intersect(watchlistRepo.getWatchlistsByCategoryId(item.categories).toSet())
             .intersect(watchlistRepo.getWatchlistsByByNowValue(item.buyNow).toSet())

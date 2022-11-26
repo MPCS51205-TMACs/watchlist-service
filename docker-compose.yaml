@@ -1,17 +1,48 @@
+version: "3"
 services:
-  postgres:
+  watchlist:
+    build:
+      context: .
+    image: maven/builder:watchlist-service
+    container_name: watchlist
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_USER=watchlist-service
+      - POSTGRES_PASSWORD=watchlist-service
+      - POSTGRES_DB=watchlist
+    command: "mvn spring-boot:run"
+    volumes:
+      - "./src:/build/src"
+      - "./target:/build/target:cached"
+    depends_on:
+      - postgres-watchlist
+      - rabbitmq
+    networks: # allows containers to recognize the hostnames of other containers
+      - my-application-network
+
+  postgres-watchlist:
     image: postgres
     container_name: postgres-watchlist
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: watchlist-service
       POSTGRES_PASSWORD: watchlist-service
       POSTGRES_DB: watchlist
+    networks: # allows containers to recognize the hostnames of other containers
+      - my-application-network
+
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: rabbitmq-server
     restart: always
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks: # allows containers to recognize the hostnames of other containers
+      - my-application-network
+
+networks:
+  my-application-network:
+    driver: bridge

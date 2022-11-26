@@ -3,7 +3,6 @@ package com.example.watchlistservice.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import org.hibernate.annotations.GenericGenerator
-import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 

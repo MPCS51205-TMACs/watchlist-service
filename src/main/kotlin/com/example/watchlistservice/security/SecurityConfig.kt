@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
@@ -16,7 +17,6 @@ import org.springframework.security.oauth2.server.resource.web.DefaultBearerToke
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.stereotype.Component
 import java.util.*
-import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -75,3 +75,6 @@ class SecurityConfig {
 
 
 }
+
+data class AuthenticatedUser(val userId: UUID, val email:String, val grantedAuthorities: Collection<GrantedAuthority>) :
+    User(userId.toString(), "", grantedAuthorities)

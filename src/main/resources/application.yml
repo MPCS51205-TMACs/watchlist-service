@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 spring:
   jpa:
     hibernate:
@@ -5,11 +8,12 @@ spring:
   datasource:
     username: watchlist-service
     password: watchlist-service
-    url: jdbc:postgresql://localhost:5432/watchlist
+    url: jdbc:postgresql://postgres-watchlist:5432/watchlist
+  rabbitmq:
+    host: rabbitmq-server
 
 jwt:
   secret: G+KbPeShVmYq3t6w9z$C&F)J@McQfTjW
 
-
 notification:
-  url: http://localhost:8081
+  url: http://notification:8080

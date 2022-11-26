@@ -16,7 +16,7 @@ class RabbitSubscriber(val watchlistService: WatchlistService, val notificationS
     @RabbitListener(queues = ["watchlist-service:item.create"])
     fun receive(item: Item) {
         val users = watchlistService.getUsersWatchingForItem(item)
-        notificationService.notifyUsers(users)
+        notificationService.notifyUsers(users, item)
     }
 
     // https://stackoverflow.com/questions/42504883/how-to-deal-with-json-message-with-spring-rabbit-in-spring-boot-application

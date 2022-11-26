@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class WatchlistServiceApplicationTests {
 
-    @Test
-    fun contextLoads() {
-    }
+//    @Test
+//    fun contextLoads() {
+//    }
 
 }

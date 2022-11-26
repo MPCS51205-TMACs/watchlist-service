@@ -1,5 +1,6 @@
 package com.example.watchlistservice.service
 
+import com.example.watchlistservice.model.Item
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -12,10 +13,10 @@ class NotificationService {
     @Value("\${notification.url}")
     lateinit var url: String
 
-    @Autowired
-    lateinit var restTemplate: RestTemplate
+//    @Autowired
+//    lateinit var restTemplate: RestTemplate
 
-    fun notifyUsers(users: Collection<UUID>) {
+    fun notifyUsers(users: Collection<UUID>, item: Item) {
         users.forEach { user -> send(user) }
     }
 

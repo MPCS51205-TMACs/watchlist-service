@@ -28,6 +28,9 @@ class Watchlist {
     @Column
     var maxPrice: Double = Double.MAX_VALUE
 
+    @Column
+    var active: Boolean = true
+
     @OneToMany(mappedBy = "watchlist", cascade = [CascadeType.ALL])
     var categories: List<WatchlistCategory> = listOf()
 

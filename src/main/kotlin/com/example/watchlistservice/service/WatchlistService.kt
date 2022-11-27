@@ -19,15 +19,17 @@ class WatchlistService(val watchlistRepo: WatchlistRepo) {
         return save(watchlist)
     }
 
-    fun getMyWatchlists(userId: UUID) : Collection<Watchlist> = watchlistRepo.getWatchlistsByUserId(userId)
+    fun getWatchlistsByUserID(userId: UUID): Collection<Watchlist> = watchlistRepo.getWatchlistsByUserId(userId)
 
+    fun deleteWatchlistsByUserId(userId: UUID)  = watchlistRepo.deleteWatchlistByUserId(userId)
+
+    fun updateActivationStatus(userId: UUID, isActive: Boolean) = watchlistRepo.updateActivationStatus(userId,isActive)
 
     fun getUsersWatchingForItem(item: Item): Collection<UUID> {
         //TODO: startingPrice or BuyNow price
-        //TODO: no categories
-        return watchlistRepo.getWatchlistsByPrice(item.startingPrice)
-            .intersect(watchlistRepo.getWatchlistsByCategoryId(item.categories).toSet())
-            .intersect(watchlistRepo.getWatchlistsByByNowValue(item.buyNow).toSet())
+        return watchlistRepo.getWatchlistsIntersectCategories(item.categories)
+            .intersect(watchlistRepo.getWatchlistsByPrice(item.startingPrice))
+            .intersect(watchlistRepo.getWatchlistsByByNowValue(item.buyNow)).map { it.userId }.toSet()
 
     }
 

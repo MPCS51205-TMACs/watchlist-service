@@ -1,6 +1,5 @@
 package com.example.watchlistservice.controller
 
-import com.example.watchlistservice.model.Item
 import com.example.watchlistservice.model.Watchlist
 import com.example.watchlistservice.service.WatchlistService
 import org.springframework.security.core.Authentication
@@ -20,5 +19,5 @@ class WatchlistController(val watchlistService: WatchlistService) {
     }
 
     @GetMapping
-    fun getMyWatchlists(authentication: Authentication) : Collection<Watchlist> = watchlistService.getMyWatchlists(UUID.fromString(authentication.name))
+    fun getMyWatchlists(authentication: Authentication) : Collection<Watchlist> = watchlistService.getWatchlistsByUserID(UUID.fromString(authentication.name))
 }

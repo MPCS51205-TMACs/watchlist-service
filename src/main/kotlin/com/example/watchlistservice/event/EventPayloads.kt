@@ -1,5 +1,7 @@
 package com.example.watchlistservice.event
 
+import com.example.watchlistservice.model.Item
+import java.io.Serializable
 import java.util.*
 
 class UserActivation {
@@ -9,4 +11,9 @@ class UserActivation {
 
 class UserDelete{
     lateinit var userId: UUID
+}
+
+class WatchlistMatch: Serializable{
+    lateinit var userId: UUID
+    lateinit var item: Item
 }

@@ -17,25 +17,11 @@ import org.springframework.stereotype.Component
 @Component
 class RabbitSubscriber(val watchlistService: WatchlistService, val notificationService: NotificationService) {
 
-    @Bean
-    fun itemCreateQueue(): Queue = Queue("watchlist-service:item.create",true)
-    @Bean
-    fun itemCreateExchange(): FanoutExchange = FanoutExchange("item.create",true,false)
-    @Bean
-    fun itemCreateBinding(): Binding = BindingBuilder.bind(itemCreateQueue()).to(itemCreateExchange())
-
     @RabbitListener(queues = ["watchlist-service:item.create"])
     fun receiveItemCreate(item: Item) {
         val users = watchlistService.getUsersWatchingForItem(item)
         notificationService.notifyUsers(users, item)
     }
-
-    @Bean
-    fun userActivationQueue(): Queue = Queue("watchlist-service:user.activation",true)
-    @Bean
-    fun userActivationExchange(): FanoutExchange = FanoutExchange("user.activation",true,false)
-    @Bean
-    fun userActivationBinding(): Binding = BindingBuilder.bind(userActivationQueue()).to(userActivationExchange())
 
     @RabbitListener(queues = ["watchlist-service:user.activation"])
     fun receiveUserActivation(userActivation: UserActivation) {
@@ -43,24 +29,10 @@ class RabbitSubscriber(val watchlistService: WatchlistService, val notificationS
         watchlistService.updateActivationStatus(userActivation.userId, userActivation.active!!)
     }
 
-    @Bean
-    fun userDeleteQueue(): Queue = Queue("watchlist-service:user.delete",true)
-    @Bean
-    fun userDeleteExchange(): FanoutExchange = FanoutExchange("user.delete",true,false)
-    @Bean
-    fun userDeleteBinding(): Binding = BindingBuilder.bind(userDeleteQueue()).to(userDeleteExchange())
-
     @RabbitListener(queues = ["watchlist-service:user.delete"])
     fun receiveUserDelete(userDelete: UserDelete) {
         println("Delete user ${userDelete.userId}")
         watchlistService.deleteWatchlistsByUserId(userDelete.userId)
     }
 
-
-
-    // https://stackoverflow.com/questions/42504883/how-to-deal-with-json-message-with-spring-rabbit-in-spring-boot-application
-    @Bean
-    fun jsonMessageConverter(): MessageConverter? {
-        return Jackson2JsonMessageConverter()
-    }
 }

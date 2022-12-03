@@ -37,6 +37,7 @@ class Watchlist {
     @OneToMany(mappedBy = "watchlist", cascade = [CascadeType.ALL])
     var buyNowEnabled: List<WatchlistBuyNow> = listOf()
 
+    fun transform(): WatchlistWCategoryNames = WatchlistWCategoryNames(watchlistId!!,userId,name,minPrice,maxPrice, active,buyNowEnabled)
 
 }
 

@@ -1,12 +1,13 @@
 package com.example.watchlistservice.controller
 
 import com.example.watchlistservice.model.Watchlist
+import com.example.watchlistservice.model.WatchlistWCategoryNames
 import com.example.watchlistservice.service.WatchlistService
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/watchlist")
 class WatchlistController(val watchlistService: WatchlistService) {
@@ -23,5 +24,5 @@ class WatchlistController(val watchlistService: WatchlistService) {
     fun deleteWatchlist(@PathVariable watchlistId: UUID?, authentication: Authentication) = if (watchlistId!= null) watchlistService.deleteWatchlist(watchlistId,UUID.fromString(authentication.name)) else watchlistService.deleteWatchlistsByUserId(UUID.fromString(authentication.name))
 
     @GetMapping
-    fun getMyWatchlists(authentication: Authentication) : Collection<Watchlist> = watchlistService.getWatchlistsByUserID(UUID.fromString(authentication.name))
+    fun getMyWatchlists(authentication: Authentication) : Collection<WatchlistWCategoryNames> = watchlistService.getWatchlistsByUserID(UUID.fromString(authentication.name))
 }

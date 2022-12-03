@@ -25,7 +25,6 @@ class RabbitSubscriber(val watchlistService: WatchlistService, val notificationS
 
     @RabbitListener(queues = ["watchlist-service:user.activation"])
     fun receiveUserActivation(userActivation: UserActivation) {
-        println("Updating user bids ${userActivation.userId} & ${userActivation.active}")
         watchlistService.updateActivationStatus(userActivation.userId, userActivation.active!!)
     }
 

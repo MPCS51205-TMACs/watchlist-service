@@ -15,6 +15,7 @@ class Item: Serializable {
     lateinit var description: String
     var quantity: Int = 0
     var price: Double = 0.0
+    var startPrice: Double = 0.0
     var shippingCosts: Double = 0.0
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", shape = JsonFormat.Shape.STRING)

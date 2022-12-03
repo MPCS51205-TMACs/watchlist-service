@@ -9,5 +9,8 @@ spring:
   rabbitmq:
     host: rabbitmq-server
 
+item:
+  url: http://localhost:8088
+
 jwt:
   secret: G+KbPeShVmYq3t6w9z$C&F)J@McQfTjW

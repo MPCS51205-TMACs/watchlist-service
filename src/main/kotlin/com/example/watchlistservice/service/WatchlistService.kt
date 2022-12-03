@@ -1,17 +1,17 @@
 package com.example.watchlistservice.service
 
+import com.example.watchlistservice.model.Category
 import com.example.watchlistservice.model.Item
 import com.example.watchlistservice.model.Watchlist
+import com.example.watchlistservice.model.WatchlistWCategoryNames
 import com.example.watchlistservice.repo.WatchlistRepo
 import org.springframework.http.HttpStatus
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @Service
-class WatchlistService(val watchlistRepo: WatchlistRepo) {
+class WatchlistService(val watchlistRepo: WatchlistRepo, val itemService: ItemService) {
     fun createWatchlist(watchlist: Watchlist): Watchlist {
         watchlist.categories.forEach {
             it.watchlist = watchlist
@@ -23,20 +23,35 @@ class WatchlistService(val watchlistRepo: WatchlistRepo) {
         return save(watchlist)
     }
 
-    fun getWatchlistsByUserID(userId: UUID): Collection<Watchlist> = watchlistRepo.getWatchlistsByUserId(userId)
+    fun getWatchlistsByUserID(userId: UUID): Collection<WatchlistWCategoryNames> {
+        val watchlists = watchlistRepo.getWatchlistsByUserId(userId)
+        val categories = watchlists.flatMap { it.categories.map { it.categoryId } }
+        val catMap = itemService.getCategories(categories)
 
-    fun deleteWatchlistsByUserId(userId: UUID)  = watchlistRepo.deleteWatchlistByUserId(userId)
+        val results = mutableListOf<WatchlistWCategoryNames>()
 
-    fun deleteWatchlist(watchlistId: UUID, requester: UUID){
+        for (watchlist in watchlists){
+            val withCategoryName = watchlist.transform()
+            withCategoryName.categories = watchlist.categories.map { Category().apply { id=it.categoryId; categoryDescription = catMap.getOrDefault(it.categoryId,"~unknown~") } }.filter { it.categoryDescription!="~unknown~" }
+            results.add(withCategoryName)
+        }
+
+        return results
+
+    }
+
+    fun deleteWatchlistsByUserId(userId: UUID) = watchlistRepo.deleteWatchlistByUserId(userId)
+
+    fun deleteWatchlist(watchlistId: UUID, requester: UUID) {
         val watchlist = getReferenceById(watchlistId)
 
-        if (requester!= watchlist.userId){
+        if (requester != watchlist.userId) {
             throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
         }
         watchlistRepo.delete(watchlist)
     }
 
-    fun updateActivationStatus(userId: UUID, isActive: Boolean) = watchlistRepo.updateActivationStatus(userId,isActive)
+    fun updateActivationStatus(userId: UUID, isActive: Boolean) = watchlistRepo.updateActivationStatus(userId, isActive)
 
     fun getUsersWatchingForItem(item: Item): Collection<UUID> {
         return getWatchlistsByCategoriesFilter(item.categories.map { it.id })
@@ -45,10 +60,10 @@ class WatchlistService(val watchlistRepo: WatchlistRepo) {
 
     }
 
-    fun getWatchlistsByCategoriesFilter(categoryIds: Collection<UUID>) : List<UUID> = watchlistRepo.getWatchlistsWithZeroCategories().plus(watchlistRepo.getWatchlistsByCategoryId(categoryIds))
+    fun getWatchlistsByCategoriesFilter(categoryIds: Collection<UUID>): List<UUID> =
+        watchlistRepo.getWatchlistsWithZeroCategories().plus(watchlistRepo.getWatchlistsByCategoryId(categoryIds))
 
-    private fun getReferenceById(watchlistId: UUID): Watchlist  = watchlistRepo.getReferenceById(watchlistId)
-
+    private fun getReferenceById(watchlistId: UUID): Watchlist = watchlistRepo.getReferenceById(watchlistId)
 
 
     private fun save(watchlist: Watchlist): Watchlist {

@@ -28,8 +28,6 @@ class WatchlistService(val watchlistRepo: WatchlistRepo, val itemService: ItemSe
         val categories = watchlists.flatMap { it.categories.map { it.categoryId } }
 
         val catMap = itemService.getCategories(categories)
-        // default string is used as the default to the get in catMap
-
         val results = mutableListOf<WatchlistWCategoryNames>()
         for (watchlist in watchlists){
             val withCategoryName = watchlist.transform()

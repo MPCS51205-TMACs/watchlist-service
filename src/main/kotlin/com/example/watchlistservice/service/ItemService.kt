@@ -19,11 +19,21 @@ class ItemService {
     var restTemplate: RestTemplate = RestTemplate()
 
     fun getCategories(ids: Collection<UUID>): Map<UUID, String> {
-        val response: ResponseEntity<Array<Category>> = restTemplate.getForEntity(
-            "${url}/category?id=${ids.joinToString(",")}",
-            Array<Category>::class.java
-        )
-        return response.body!!.map { it.id to it.categoryDescription }.toMap()
+        // attempt to get categories from item-service
+        try{
+            val response: ResponseEntity<Array<Category>> = restTemplate.getForEntity(
+                "${url}/category?id=${ids.joinToString(",")}",
+                Array<Category>::class.java
+            )
+            if (response.statusCode.is2xxSuccessful){
+                return response.body!!.map { it.id to it.categoryDescription }.toMap()
+            }
+
+        } catch (e: Exception){
+
+        }
+        // if failed, return an empty map
+        return mapOf()
 
     }
 

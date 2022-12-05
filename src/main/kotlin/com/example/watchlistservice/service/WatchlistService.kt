@@ -26,13 +26,14 @@ class WatchlistService(val watchlistRepo: WatchlistRepo, val itemService: ItemSe
     fun getWatchlistsByUserID(userId: UUID): Collection<WatchlistWCategoryNames> {
         val watchlists = watchlistRepo.getWatchlistsByUserId(userId)
         val categories = watchlists.flatMap { it.categories.map { it.categoryId } }
+
         val catMap = itemService.getCategories(categories)
+        // default string is used as the default to the get in catMap
 
         val results = mutableListOf<WatchlistWCategoryNames>()
-
         for (watchlist in watchlists){
             val withCategoryName = watchlist.transform()
-            withCategoryName.categories = watchlist.categories.map { Category().apply { id=it.categoryId; categoryDescription = catMap.getOrDefault(it.categoryId,"~unknown~") } }.filter { it.categoryDescription!="~unknown~" }
+            withCategoryName.categories = watchlist.categories.map { Category().apply { id=it.categoryId; categoryDescription = catMap.getOrDefault(it.categoryId,"") } }.filter { it.categoryDescription!="" }
             results.add(withCategoryName)
         }
 
